@@ -23,6 +23,7 @@ const AddUpdateEmployee = () => {
     
 
     const [employeesList, setEmployeesList] = useState([])
+    const [departmentList, setDepartmentList] = useState([])
 
     const token = localStorage.getItem("access_token");
 
@@ -86,7 +87,10 @@ const AddUpdateEmployee = () => {
             
             fetch(process.env.REACT_APP_EMPLOYEE_URL + `/${id}`, {
                 method: "PUT",
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                }, 
                 body: JSON.stringify(employeeInput),
             })
                 .then((res) => {
@@ -96,7 +100,7 @@ const AddUpdateEmployee = () => {
                 {
                     setEmployeesList([...employeesList, data])
                     setEmployeesList("")
-                    toast.success("Employee Updated Successfully! Redirecting to main page", {
+                    toast.success("Employee Updated Successfully! Redirecting..", {
                         position: "bottom-center",
                         autoClose: 3000,
                         hideProgressBar: false,
@@ -108,7 +112,7 @@ const AddUpdateEmployee = () => {
                     });
                     setTimeout(() =>
                     {
-                        navigate('/employees')
+                        navigate(`/view/${id}`)
                     }, 3000);
                 })
                     } else 
@@ -153,7 +157,35 @@ const AddUpdateEmployee = () => {
         }
     }
 
-    
+    useEffect(() =>
+    {
+        fetch(process.env.REACT_APP_DEPARTMENT_URL,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                }, 
+            })
+            .then(res =>
+            {
+                if (!res.ok)
+                {
+                    throw new Error('Unauthorized');
+                }
+                return res.json();
+            })
+            .then(data =>
+            {
+                setDepartmentList(data);
+            })
+            .catch(error =>
+            {
+                console.error(error);
+            });
+    }, [])
+
+console.log(departmentList)
 
     return (
     <div>
@@ -190,12 +222,13 @@ const AddUpdateEmployee = () => {
                                         }
                                     })} required>
                                         <option value="">Select Department</option>
-                                        <option value="1">Human Resources</option>
-                                        <option value="2">Operations</option>
-                                        <option value="3">Training</option>
-                                        <option value="52">Sales</option>
-                                        <option value="53">Accounts</option>
+                                        {
+                                        departmentList.map((item => (
+                                            <option key={item.id} value={item.id}>{item.departmentName}</option>
+                                        )))
+                                        }
                                     </select>
+                                    
 
                                 </div>
                                 <br />

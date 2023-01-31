@@ -74,7 +74,7 @@ const EmployeeDetailList = (props) => {
 
     return (
         <div>
-            &nbsp;<h3 className='text-center'>List of Employees in Department </h3>
+            &nbsp;<h3 className='text-center'>List of Employees in department </h3>
             <div className='container'>
                 <br />
                 <table className="table table-sm table-striped table-bordered table-hover">

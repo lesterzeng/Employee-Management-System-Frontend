@@ -11,17 +11,19 @@ import ListDepartments from './Pages/ListDepartments'
 import ViewDepartments from './Pages/ViewDepartments'
 import AddUpdateDepartment from './Pages/AddUpdateDepartment';
 import Login from './Pages/Login';
+import SearchPage from './Pages/SearchPage';
 
 
 function App() {
   return (
     <div>
       <BrowserRouter>
-        <Header/>
+        {window.location.pathname !== "/" && window.location.pathname !== "/login" ? <Header /> : <div></div>}
         < div className="container">
              <Routes>
               <Route path="/" element={<Login />}></Route> 
               <Route path="/login" element={<Login />}></Route> 
+              <Route path="/search" element={<SearchPage />}></Route> 
               <Route path="/employees" element={<ListEmployee/>}></Route> 
               <Route path="/addupdate/:id" element={<AddUpdateEmployee />}></Route>
               <Route path="/view/:id" element={<ViewEmployee />}></Route>

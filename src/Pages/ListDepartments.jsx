@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 const ListDepartments = () => {
 
+    const token = localStorage.getItem("access_token");
+    const headers = new Headers({
+        'Authorization': `Bearer ${token}`
+    });
+
     let navigate = useNavigate()
 
     const [departmentList, setDepartmentList] = useState([])
@@ -12,19 +17,31 @@ const ListDepartments = () => {
 
     useEffect(() =>
     {
-        fetch(process.env.REACT_APP_DEPARTMENT_URL)
-
-            .then(res => res.json())
-            .then(data =>
+        fetch(process.env.REACT_APP_DEPARTMENT_URL, 
             {
-                setDepartmentList(data)
-            })
+            method: "GET",
+            headers: headers
+        })
+        .then(res =>
+        {
+            if (!res.ok)
+            {
+                throw new Error('Unauthorized');
+            }
+            return res.json();
+        })
+        .then(data =>
+        {
+            setDepartmentList(data);
+        })
+        .catch(error =>
+        {
+            console.error(error);
+        });
     }, [departmentList])
 
 
-    const handleUpdate = (id) => {
-        navigate(`/departments/${id}`)
-    }
+
 
     const handleDelete = (id, departmentName) =>
     {
@@ -53,6 +70,11 @@ const ListDepartments = () => {
 
     }
 
+    const handleUpdate = (id) =>
+    {
+        navigate(`/departments/${id}`)
+    }
+    
     const handleView = (id) =>
     {
         navigate(`/departments/${id}/employees`)
@@ -68,11 +90,8 @@ const ListDepartments = () => {
         navigate(`/employees`)
     }
 
-
     return (
         <div>
-            <br />
-            <br />
             &nbsp;<h2 className='text-center'>List of Departments</h2>
             <br />
             <div className='row '>

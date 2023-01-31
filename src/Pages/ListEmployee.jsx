@@ -6,20 +6,34 @@ import {useNavigate} from 'react-router-dom'
 
 const ListEmployee = () => {
 
+    const token = localStorage.getItem("access_token");
+
+
     let navigate = useNavigate()
 
     const [employeesList, setEmployeesList] = useState([])
 
     useEffect(() =>
     {
-
-        fetch(process.env.REACT_APP_EMPLOYEE_URL)
-
-        .then(res => res.json())
-        .then(data =>
-        {
-            setEmployeesList(data)
+       fetch(process.env.REACT_APP_EMPLOYEE_URL, {
+        method: "GET",
+           headers: {
+               Authorization: "Bearer " + token,
+               "Content-Type": "application/json",
+           },
         })
+        .then(res => {
+         if (!res.ok) {
+        throw new Error('Unauthorized');
+        }
+         return res.json();
+        })
+        .then(data => {
+        setEmployeesList(data);
+            })
+        .catch(error => {
+        console.error(error);
+        });
     }, [employeesList])
 
     const handleAdd = () => {
@@ -48,29 +62,25 @@ const ListEmployee = () => {
         } catch (err) {
             toast.error("Error - Employee failed to be deleted.");
         }
-        
     }
 
     const handleView = (id) => {
         navigate(`/view/${id}`)
     }
 
-    const handleViewDepartment = () => {
-        navigate(`/departments`)
-    }
+ 
 
     return (
-        <div>
-            &nbsp;<h2 className='text-center'>List of Employees</h2>
-            <br />
+
             <div className='container'>
+
+                &nbsp;<h2 className='text-center'>List of Employees</h2>
+            <br></br>
                 <div className='row col-md-6 offset-md-3'>
                     <button className="btn btn-success" onClick={handleAdd}>Add Employee</button>
                 </div>
                <br></br>
-                <div className='row col-md-6 offset-md-3'>
-                    <button className="btn btn-primary" onClick={handleViewDepartment}>View Departments</button>
-                </div>
+            
                 <br />
                 <table className="table table-sm table-striped table-bordered table-hover">
                     <thead>
@@ -99,7 +109,7 @@ const ListEmployee = () => {
                 </table> 
             </div>     
         
-        </div>
+
     );
 };
 

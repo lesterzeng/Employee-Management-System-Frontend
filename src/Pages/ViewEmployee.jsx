@@ -1,15 +1,13 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ViewEmployee = () => {
 
     const {id} = useParams()
    
     const [singleEmployee, setSingleEmployee] = useState([])
-    
-
-    const dataFetchedRef = useRef(false);
 
     let navigate = useNavigate()
 
@@ -44,11 +42,44 @@ const ViewEmployee = () => {
                 return () =>abortController.abort();
     }, [])
 
-// console.log(singleEmployee)
-// console.log(singleEmployee.length)
-// console.log(singleEmployee.department)
-// console.log(singleEmployee.department.id)
+    const handleUpdate = (id) =>
+    {
+        navigate(`/addupdate/${id}`)
+    }  
 
+    const handleDelete = (id, firstName) =>
+    {
+
+        try
+        {
+            if (window.confirm(`Are you sure you want to delete employee: ${firstName}?`))
+            {
+                fetch(process.env.REACT_APP_EMPLOYEE_URL + `/${id}`, {
+                    method: "DELETE",
+                    headers: { 'Content-Type': 'application/json' },
+
+                })
+                    .then((res) => res.json())
+                    toast.success("Employee Updated Successfully! Redirecting to main page", {
+                    position: "bottom-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setTimeout(() =>
+                {
+                    navigate('/employees')
+                }, 3000);
+            }
+        } catch (err)
+        {
+            toast.error("Error - Employee failed to be deleted.");
+        }
+    }
   
     const hasData = singleEmployee.length
 
@@ -90,6 +121,9 @@ const ViewEmployee = () => {
                     <div className="row">
                         <label>Account Created On: {singleEmployee.createdDate}</label>
                     </div>
+                    <br></br>
+                    <button onClick={() => handleUpdate(singleEmployee.id)} className="btn btn-info">Update</button>
+                    <button onClick={() => handleDelete(singleEmployee.id, singleEmployee.firstName)} className="btn btn-danger" style={{ marginLeft: "10px" }}>Delete</button>
                  </div>
                 
             </div>

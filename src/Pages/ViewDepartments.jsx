@@ -44,11 +44,10 @@ const ViewDepartments= () =>
 
     const goListOfEmployees = () =>
     {
-        navigate(`/`)
+        navigate(`/employees`)
     }
-    // console.log(departmentDetails)
-    // console.log(hasData)
-    // console.log(departmentDetails[0].department)
+    console.log(departmentDetails)
+
 
     return (
         <div>
@@ -56,13 +55,14 @@ const ViewDepartments= () =>
             <br></br>
             <div className='card col-md-6 offset-md-3'>
                 <br></br>
-                <div className='text-center'><h3>Department</h3></div>
                 {
-                hasData > 0 ? <div className='text-center'><h1>{departmentDetails[0].department.departmentName} </h1></div> : <div className='text-center'><h3>Loading..</h3></div>
+                    hasData > 0 ? <div className='text-center'><h3>Department</h3></div> : <div className='text-center'><h3>Department is empty</h3><br></br><h4>List will only show when there are employees allocated.</h4></div>
+                }
+                {
+                hasData > 0 ? <div className='text-center'><h1>{departmentDetails[0].department.departmentName} </h1></div> : <div className='text-center'><h3></h3></div>
                 }
                 <div className='text-center'>
-                    {hasData > 0 ? <h4>ID: {departmentDetails[0].department.id}</h4> : <h4>Loading..</h4>}
-                             
+                    {hasData > 0 ? <h4>ID: {departmentDetails[0].department.id}</h4> : <h4></h4>}    
                 </div>
             </div>
             <EmployeeDetailList/>

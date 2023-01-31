@@ -37,7 +37,7 @@ const Login = () =>
                                 localStorage.setItem("access_token", token);
                                 toast.success("Login Successfully! Redirecting to Dashboard.", {
                                     position: "bottom-center",
-                                    autoClose: 3000,
+                                    autoClose: 1000,
                                     hideProgressBar: false,
                                     closeOnClick: true,
                                     pauseOnHover: true,
@@ -48,7 +48,7 @@ const Login = () =>
                                 setTimeout(() =>
                                 {
                                     navigate('/employees')
-                                }, 3000);
+                                }, 1000);
                             })
                     } else
                     {
@@ -87,7 +87,9 @@ const Login = () =>
         <div>
             <br></br>
             <br></br>
-            <h1>Welcome Administrator,</h1>
+            <h4>Employee Management System</h4>
+            <br></br>
+            <h1>Welcome Administrator</h1>
             <br></br>
             <h5>Sign into your account</h5>
             <br></br>
@@ -106,11 +108,8 @@ const Login = () =>
 
                 </div>
 
-
                 {/* <!-- Submit button --> */}
                 <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleSubmit}>Sign in</button>
-
-
             </form>
         </div>
     );
