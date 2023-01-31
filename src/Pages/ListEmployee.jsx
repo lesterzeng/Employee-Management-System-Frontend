@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 const ListEmployee = () => {
 
     const token = localStorage.getItem("access_token");
-
+    const adminId = 133
 
     let navigate = useNavigate()
 
@@ -68,7 +68,7 @@ const ListEmployee = () => {
         navigate(`/view/${id}`)
     }
 
- 
+    
 
     return (
 
@@ -93,7 +93,9 @@ const ListEmployee = () => {
                     </thead>
                     <tbody>
                         {
-                            employeesList.map((item)=> 
+                            employeesList
+                            .filter(item => item.id !== adminId)
+                            .map((item)=> 
                             <tr key = {item.id}>
                                     <td>{item.firstName}</td>
                                     <td>{item.lastName}</td>

@@ -8,6 +8,7 @@ const ViewEmployee = () => {
     const {id} = useParams()
    
     const [singleEmployee, setSingleEmployee] = useState([])
+  
 
     let navigate = useNavigate()
 
@@ -59,6 +60,7 @@ const ViewEmployee = () => {
                     headers: { 'Content-Type': 'application/json' },
 
                 })
+                    
                     .then((res) => res.json())
                     toast.success("Employee Updated Successfully! Redirecting to main page", {
                     position: "bottom-center",

@@ -90,6 +90,7 @@ const ListDepartments = () => {
         navigate(`/employees`)
     }
 
+
     return (
         <div>
             &nbsp;<h2 className='text-center'>List of Departments</h2>

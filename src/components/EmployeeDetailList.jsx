@@ -12,6 +12,7 @@ const EmployeeDetailList = (props) => {
 
     const [employeesList, setEmployeesList] = useState([])
 
+    const adminId = 133
 
     useEffect(() =>
     {
@@ -72,6 +73,11 @@ const EmployeeDetailList = (props) => {
         navigate(`/view/${id}`)
     }
 
+    // const handleSort = (sortBy) =>
+    // {
+    //     setEmployeesList([...employeesList].sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1))
+    // }
+
     return (
         <div>
             &nbsp;<h3 className='text-center'>List of Employees in department </h3>
@@ -80,6 +86,9 @@ const EmployeeDetailList = (props) => {
                 <table className="table table-sm table-striped table-bordered table-hover">
                     <thead>
                         <tr>
+                            {/* <th onClick={() => handleSort('firstName')}>First Name &#x25b4;&#x25be;</th>
+                            <th onClick={() => handleSort('lastName')}>Last Name &#x25b4;&#x25be;</th>
+                            <th onClick={() => handleSort('email')}>Email &#x25b4;&#x25be;</th> */}
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -88,7 +97,9 @@ const EmployeeDetailList = (props) => {
                     </thead>
                     <tbody>
                         {
-                            employeesList.map((item) =>
+                            employeesList
+                            .filter(item => item.id !== adminId)
+                            .map((item) =>
                                 <tr key={item.id}>
                                     <td>{item.firstName}</td>
                                     <td>{item.lastName}</td>
