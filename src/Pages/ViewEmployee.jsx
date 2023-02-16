@@ -1,14 +1,16 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const ViewEmployee = () => {
+const ViewEmployee = () =>
+{
 
-    const {id} = useParams()
-   
+    const { id } = useParams()
+    const token = localStorage.getItem("access_token");
+
     const [singleEmployee, setSingleEmployee] = useState([])
-  
+
 
     let navigate = useNavigate()
 
@@ -16,37 +18,42 @@ const ViewEmployee = () => {
     {
         const abortController = new AbortController();
 
-            const fetchEmployee = () => {
-                 fetch(process.env.REACT_APP_EMPLOYEE_URL + `/${id}`, {
-                     method: "GET",
-                     headers: { 'Content-Type': 'application/json' },
-                 })
-                     .then((res) =>
-                     {
-                         if (res.ok)
-                         {
-                             res.json()
-                                 .then(data =>
-                                 {
-                                     setSingleEmployee(data)
-                                 })
-                         } else {
-                            navigate(`/error`)
-                            throw new Error("Something went wrong - Employee doesn't exist")      
-                         }
-                     })
-                
-                }
+        const fetchEmployee = () =>
+        {
+            fetch(process.env.REACT_APP_EMPLOYEE_URL + `/${id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + token,
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then((res) =>
+                {
+                    if (res.ok)
+                    {
+                        res.json()
+                            .then(data =>
+                            {
+                                setSingleEmployee(data)
+                            })
+                    } else
+                    {
+                        navigate(`/error`)
+                        throw new Error("Something went wrong - Employee doesn't exist")
+                    }
+                })
 
-                fetchEmployee();
+        }
 
-                return () =>abortController.abort();
+        fetchEmployee();
+
+        return () => abortController.abort();
     }, [])
 
     const handleUpdate = (id) =>
     {
         navigate(`/addupdate/${id}`)
-    }  
+    }
 
     const handleDelete = (id, firstName) =>
     {
@@ -57,12 +64,12 @@ const ViewEmployee = () => {
             {
                 fetch(process.env.REACT_APP_EMPLOYEE_URL + `/${id}`, {
                     method: "DELETE",
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { Authorization: "Bearer " + token, 'Content-Type': 'application/json' },
 
                 })
-                    
+
                     .then((res) => res.json())
-                    toast.success("Employee Updated Successfully! Redirecting to main page", {
+                toast.success("Employee Updated Successfully! Redirecting to main page", {
                     position: "bottom-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -82,7 +89,7 @@ const ViewEmployee = () => {
             toast.error("Error - Employee failed to be deleted.");
         }
     }
-  
+
     const hasData = singleEmployee.length
 
 
@@ -92,10 +99,11 @@ const ViewEmployee = () => {
         navigate(`/departments/${idx}/employees`)
     }
 
-    const goBack = () => {
+    const goBack = () =>
+    {
         navigate(-1)
     }
-    
+
 
     return (
         <div>
@@ -105,9 +113,9 @@ const ViewEmployee = () => {
                 <br></br>
                 <h3 className='text-center'>Employee's Information</h3>
                 <div className='card-body'>
-                        <div className="row">
+                    <div className="row">
                         <label>First Name: {singleEmployee.firstName}</label>
-                        </div>
+                    </div>
                     <div className="row">
                         <label>Last Name: {singleEmployee.lastName}</label>
                     </div>
@@ -126,14 +134,14 @@ const ViewEmployee = () => {
                     <br></br>
                     <button onClick={() => handleUpdate(singleEmployee.id)} className="btn btn-info">Update</button>
                     <button onClick={() => handleDelete(singleEmployee.id, singleEmployee.firstName)} className="btn btn-danger" style={{ marginLeft: "10px" }}>Delete</button>
-                 </div>
-                
+                </div>
+
             </div>
-            <br/>
+            <br />
             <div className='row col-md-6 offset-md-3'>
-            {hasData === undefined ?
+                {hasData === undefined ?
                     <button className="btn btn-info" type="button" onClick={goDepartment} style={{ textAlign: "center" }}>Go to Employee's Department</button> : <p>Loading..</p>
-            }
+                }
             </div>
             <br></br>
             <div className='col-md-6 offset-md-5'>
